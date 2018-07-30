@@ -1,0 +1,8 @@
+{
+  "name": "react-t",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:woutervanvliet/react-t.git",
+  "author": "Wouter M. van Vliet <wouter@interpotential.com>",
+  "license": "MIT"
+}

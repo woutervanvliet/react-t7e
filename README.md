@@ -3,7 +3,51 @@
 
 The simplest way to do translations in React that I know of.
 
-## How to use
+## Motivation
+Translations should be simple, use an implementation that's intuitive and almost as easy to use as just inserting 
+strings. Inspiration for the API comes from the WordPress/PHP implementation of gettext. Code that's familiar to many.
+
+## Example
+Let's start with a fully functional example. Different ways to use it, including tips on how to create your own translation
+engine, or .po/.mo files will follow afterwards.
+
+````javascript
+import { 
+  _, 
+  _n,
+  TranslationProvider,
+  MoEngine,
+} from 'react-t7e';
+
+
+function MyComponent(props) {
+    return (
+        <div>
+            <h1>{_('Hello World')}</h1>
+            <h2>{_(
+              'You are using version {version} if this application', 
+              undefined, 
+              { version: '100' },
+            )}</h2>
+            <p>{_n('The has one fish.', 'The world has %d fish in the sea.', props.fishCount)}</p>
+        </div>
+    )
+}
+
+fetch('/language/' + language + '.mo')
+    .then((response) => response.arrayBuffer())
+    .then((moData) => {
+        const engine = new MoEngine(moData);
+        ReactDOM.render(
+            <TranslationProvider engine={engine}>
+                <MyComponent fishCount={12} />
+            </TranslationProvider>,
+            document.getElementById('app'),
+        )
+    })
+````
+
+## How to use in other scenarios
 You can get started with almost no setup, if all you need is a simple way to handle plurality, or if you intend to make
 your app translatable later. 
 
@@ -43,7 +87,11 @@ class ShoutEngine {
 }
 ```
 
-Which you use as such, if indeed all you want is to uppercase your strings.
+Instead of changing all characters to their uppercase equivalent, you could for example lookup your translation strings 
+in an object that you have loaded somehow.
+
+And then you'll use your newly created translation engine like so:
+
 
 ````javascript
 import { TranslationProvider } from 'react-t7e';
@@ -59,8 +107,8 @@ function App() {
 }
 ````
 
-But to make it really useful, we use hook up [Jed](https://github.com/messageformat/Jed) and 
-[jed-gettext-parser](https://github.com/WrinklyNinja/jed-gettext-parser).
+But to make it really useful, I prefer to hook up [Jed](https://github.com/messageformat/Jed) and 
+[jed-gettext-parser](https://github.com/WrinklyNinja/jed-gettext-parser). 
 
 ```javascript
 import ReactDOM from 'react-dom';
@@ -81,7 +129,7 @@ fetch('/language/' + language + '.mo')
     })
 ```
 
-You can of course read the data from your .mo files any way you want, send another `engine` down the `TranslationProvider`
+You can choose to the data from your .mo files any way you want, send another `engine` down the `TranslationProvider`
 to change the language, wrap multiple `TranslationProvider`'s if you want some part of your app to read messages from
 another language or write your own engine to read translations from somewhere else.
 
@@ -90,7 +138,7 @@ Translation without some form of placeholders is practically useless. This modul
 and count formatting (in the `_n` function).
 
 Simply pass an object with key-value pairs as 3rd argument to `_` or 5th argument to `_n`, and use the keys between curly
-braces in your source string to get it replaced. Or use either `%d` or '%f' to get your `count` argument as an integer
+braces in your source string to get it replaced. Or use either `%d` or `%f` to get your `count` argument as an integer
 or floating point (two positions) in your result string. This intentionally looks like 
 [printf](https://www.gnu.org/software/libc/manual/html_node/Formatted-Output-Functions.html), but only these two 
 formatting instructions are supported. More may be added in a future version.
@@ -118,7 +166,7 @@ import the `T` component and use that.
 Pull requests to document how to generate .pot files from this are very much welcome.
 
 ## How to create .mo files
-.mo files are combiled .po files. An editor such as [PoEdit](https://poedit.net) can be used to create both. It can
+.mo files are compiled .po files. An editor such as [PoEdit](https://poedit.net) can be used to create both. It can
 also be used to generate a template (.pot) file by scanning your code, but that can be tricky and it needs to understand
 your exact setup of JavaScript to really work. Intead, I recommend 
 [babel-gettext-extractor](https://github.com/getsentry/babel-gettext-extractor) to generate a full POT file every time
@@ -146,7 +194,7 @@ you build your code. Configuration of the plugin may look like this:
 As shown in the example, you can load .mo files with the Fetch API. But that's not the only way. The only thing that
 matters, is that you get the contents of your .mo file as `ArrayBuffer`.
 
-If you use webpack, consider [arraybuffer-loader](https://github.com/pine/arraybuffer-loader) and you can it like so:
+If you use webpack, consider [arraybuffer-loader](https://github.com/pine/arraybuffer-loader) and you can use it like so:
 
 ```javascript
 import ReactDOM from 'react-dom';
@@ -190,7 +238,7 @@ const i18n = {
 };
 
 const languageCode = 'nl';
-const Language = i18n[languageCode]
+const Language = i18n[languageCode];
 
 ReactDOM.render(
     <Language>
@@ -203,6 +251,3 @@ ReactDOM.render(
 ## Server-side rendering
 Works just the same. This module uses the stable `React.createContext` API to send the translation engine around.
 
-## Motivation
-Translations should be simple, use an implementation that's intuitive and almost as easy to use as just inserting 
-strings. Inspiration for the API comes from the WordPress/PHP implementation of gettext. Code that's familiar to many.

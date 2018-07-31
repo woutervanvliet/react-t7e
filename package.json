@@ -18,6 +18,7 @@
     "po"
   ],
   "scripts": {
+	"test": "yarn lint",
     "lint": "eslint --ignore-pattern=!.eslintrc.js .eslintrc.js src/",
     "clean": "rimraf es/ lib/",
     "prepare": "yarn build",

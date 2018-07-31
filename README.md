@@ -1,4 +1,6 @@
 # React T7E
+[![Build Status](https://travis-ci.com/woutervanvliet/react-t7e.svg?branch=master)](https://travis-ci.com/woutervanvliet/react-t7e)
+
 The simplest way to do translations in React that I know of.
 
 ## How to use

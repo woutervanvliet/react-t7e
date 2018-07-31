@@ -1,6 +1,7 @@
-.idea
-node_modules/
-yarn-error.log
-package-lock.json
-lib/
+/.idea
+/node_modules/
+/yarn-error.log
+/package-lock.json
+/lib/
 /es/
+/*.tgz

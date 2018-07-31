@@ -1,6 +1,6 @@
 {
   "name": "react-t",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "main": "./lib/index.js",
   "es": "./es/index.js",
   "repository": "git@github.com:woutervanvliet/react-t.git",
@@ -19,6 +19,11 @@
     "build:flow:lib": "flow-copy-source src lib",
     "build:flow:es": "flow-copy-source src es"
   },
+  "files": [
+    "lib/",
+    "es",
+    "src"
+  ],
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.55",
     "@babel/core": "^7.0.0-beta.55",

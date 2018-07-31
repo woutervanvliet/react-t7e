@@ -1,6 +1,6 @@
 {
   "name": "react-t7e",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "./lib/index.js",
   "es": "./es/index.js",
   "repository": "git@github.com:woutervanvliet/react-t7e.git",

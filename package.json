@@ -6,6 +6,7 @@
   "repository": "git@github.com:woutervanvliet/react-t.git",
   "author": "Wouter M. van Vliet <wouter@interpotential.com>",
   "license": "MIT",
+  "sideEffects": false,
   "scripts": {
     "lint": "eslint --ignore-pattern=!.eslintrc.js .eslintrc.js src/",
     "clean": "rimraf es/ lib/",

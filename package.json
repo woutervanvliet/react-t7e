@@ -1,12 +1,22 @@
 {
   "name": "react-t",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./lib/index.js",
+  "es": "./es/index.js",
   "repository": "git@github.com:woutervanvliet/react-t.git",
   "author": "Wouter M. van Vliet <wouter@interpotential.com>",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint --ignore-pattern=!.eslintrc.js .eslintrc.js src/"
+    "lint": "eslint --ignore-pattern=!.eslintrc.js .eslintrc.js src/",
+    "clean": "rimraf es/ lib/",
+    "prebuild": "yarn run clean",
+    "build": "yarn build:babel && yarn build:flow",
+    "build:babel": "yarn build:babel:es && yarn build:babel:lib",
+    "build:babel:es": "BABEL_ENV=es babel src -d es",
+    "build:babel:lib": "BABEL_ENV=commonjs babel src -d lib",
+    "build:flow": "yarn build:flow:lib && yarn build:flow:es",
+    "build:flow:lib": "flow-copy-source src lib",
+    "build:flow:es": "flow-copy-source src es"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-beta.55",
@@ -23,10 +33,11 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.10.0",
     "flow-bin": "^0.77.0",
-    "flow-copy-source": "^2.0.2"
+    "flow-copy-source": "^2.0.2",
+    "rimraf": "^2.6.2"
   },
   "peerDependencies": {
-    "react": "^16.4.1"
+    "react": "^16.3.0-0"
   },
   "dependencies": {
     "jed": "^1.1.1",

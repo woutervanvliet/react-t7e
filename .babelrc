@@ -4,6 +4,24 @@
 	],
 	"presets": [
 		"@babel/react",
-		"@babel/flow",
-	]
+		"@babel/flow"
+	],
+	"env": {
+		"es": {
+			"presets": [
+				["@babel/env", {
+					"modules": false,
+					"useBuiltIns": false
+				}]
+			]
+		},
+		"commonjs": {
+			"presets": [
+				["@babel/env", {
+					"modules": "commonjs",
+					"useBuiltIns": false
+				}]
+			]
+		}
+	}
 }

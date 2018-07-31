@@ -1,12 +1,12 @@
-# Translations for React
-The simplest way to do i18n in React that I know of.
+# React T7E
+The simplest way to do translations in React that I know of.
 
 ## How to use
 You can get started with almost no setup, if all you need is a simple way to handle plurality, or if you intend to make
 your app translatable later. 
 
 ```javascript
-import { _, _n } from 'react-r';
+import { _, _n } from 'react-t7e';
 
 function MyComponent(props) {
     return (
@@ -44,7 +44,7 @@ class ShoutEngine {
 Which you use as such, if indeed all you want is to uppercase your strings.
 
 ````javascript
-import { TranslationProvider } from 'react-r';
+import { TranslationProvider } from 'react-t7e';
 
 const engine = new ShoutEngine();
 
@@ -62,7 +62,7 @@ But to make it really useful, we use hook up [Jed](https://github.com/messagefor
 
 ```javascript
 import ReactDOM from 'react-dom';
-import { MoEngine, TranslationProvider } from 'react-r';
+import { MoEngine, TranslationProvider } from 'react-t7e';
 
 const language = 'nl_NL';
 
@@ -148,7 +148,7 @@ If you use webpack, consider [arraybuffer-loader](https://github.com/pine/arrayb
 
 ```javascript
 import ReactDOM from 'react-dom';
-import { MoEngine, TranslationProvider } from 'react-r';
+import { MoEngine, TranslationProvider } from 'react-t7e';
 import moData from './nl_NL.mo';
 const engine = new MoEngine(moData);
 
@@ -165,7 +165,7 @@ Hook up something like [react-loadable](https://github.com/jamiebuilds/react-loa
 
 
 ```javascript
-import { MoEngine, TranslationProvider } from 'react-r';
+import { MoEngine, TranslationProvider } from 'react-t7e';
 
 const render = (moData, props) => (
     <TranslationProvider engine={new MoEngine(moData.default)}>

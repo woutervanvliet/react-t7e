@@ -3,10 +3,20 @@
   "version": "0.0.1",
   "main": "./lib/index.js",
   "es": "./es/index.js",
-  "repository": "git@github.com:woutervanvliet/react-t.git",
+  "repository": "git@github.com:woutervanvliet/react-t7e.git",
   "author": "Wouter M. van Vliet <wouter@interpotential.com>",
   "license": "MIT",
   "sideEffects": false,
+  "keywords": [
+    "react",
+    "i18n",
+    "translate",
+    "reactjs",
+    "translations",
+    "gettext",
+    "mo",
+    "po"
+  ],
   "scripts": {
     "lint": "eslint --ignore-pattern=!.eslintrc.js .eslintrc.js src/",
     "clean": "rimraf es/ lib/",

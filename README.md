@@ -21,7 +21,7 @@ function MyComponent(props) {
 This just works. But you probably want to be able to use it for actual translations. You need a `TranslationProvider` and
 a `TranslationEngine` for that. The engine should be an instance with, at least, a single `translate` method. Such as:
 
-```flow js
+```javascript
 class ShoutEngine {
     translate(
         source: string,

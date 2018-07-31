@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "eslint --ignore-pattern=!.eslintrc.js .eslintrc.js src/",
     "clean": "rimraf es/ lib/",
-    "prepublish": "yarn build",
+    "prepare": "yarn build",
     "prebuild": "yarn run clean",
     "build": "yarn build:babel && yarn build:flow",
     "build:babel": "yarn build:babel:es && yarn build:babel:lib",

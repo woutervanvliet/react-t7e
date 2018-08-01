@@ -47,7 +47,41 @@ fetch('/language/' + language + '.mo')
     })
 ````
 
-## How to use in other scenarios
+## API
+```javascript
+import { _, _n, TranslationContext, TranslationProvider, MoEngine, T, } from 'react-t7e';
+```
+
+### Used types
+The following types are used internally, and referenced here in the documentation:
+```javascript
+type Replacements = {
+  [key: string]: string | number,
+}
+
+interface TranslateEngine {
+  translate(source: string, sourcePlural?: string, count?: number, context?: string): string;
+}
+```
+### `_(source: string, context?: string, replacements?: Replacements )`
+Translates a string from your source language to the target language, returns ReactNode.
+
+### `_n(source: string, sourcePlural: string, count: number, context?: string, replacements?: Replacements )`
+Translates a string with plural forms from your source language to the target language, returns ReactNode.
+
+### `<TranslationProvider engine={engine: TranslationEngine} />`
+Sets the translation engine for this part of the React render tree (all child components from here). One engine
+is provided in this module (`MoEngine`).
+
+### `<TranslationContext>{({ _n, _ }) => React.Node}</TranslationContext>`
+Gives you direct access to translation functions returning strings rather than ReactNodes, use this if you need
+to have a property (such as `title` or `aria-label`) translated or for any other reason need a translation as 
+string rather than ReactNode. Signatures are the same as main `_` and `_n` in the main export.
+
+### `MoEngine(data: ByteArray, domain: string)`
+Engine that uses the contents of a .mo file for translations.
+
+## Guide
 You can get started with almost no setup, if all you need is a simple way to handle plurality, or if you intend to make
 your app translatable later. 
 
@@ -251,3 +285,8 @@ ReactDOM.render(
 ## Server-side rendering
 Works just the same. This module uses the stable `React.createContext` API to send the translation engine around.
 
+
+# Todo
+ - Write tests
+ - Support for translation domains
+ - Improve documentation

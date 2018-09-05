@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "main": "./lib/index.js",
   "es": "./es/index.js",
+  "types": "react-t7e.d.ts",
   "repository": "git@github.com:woutervanvliet/react-t7e.git",
   "author": "Wouter M. van Vliet <wouter@interpotential.com>",
   "license": "MIT",

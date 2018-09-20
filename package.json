@@ -33,6 +33,7 @@
     "build:flow:es": "flow-copy-source src es"
   },
   "files": [
+    "react-t7e.d.ts",
     "lib/",
     "es",
     "src"

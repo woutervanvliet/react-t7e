@@ -19,7 +19,8 @@
     "po"
   ],
   "scripts": {
-    "test": "BABEL_ENV=commonjs mocha && yarn lint",
+    "test": "BABEL_ENV=commonjs mocha",
+    "posttest": "yarn lint",
     "lint": "eslint --ignore-pattern=!.eslintrc.js .eslintrc.js src/",
     "clean": "rimraf es/ lib/",
     "prepare": "yarn build",
@@ -57,6 +58,8 @@
     "eslint-plugin-react": "^7.11.1",
     "flow-bin": "^0.81.0",
     "flow-copy-source": "^2.0.2",
+    "jsdom": "^12.0.0",
+    "jsdom-global": "^3.0.2",
     "mocha": "^5.2.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",

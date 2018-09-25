@@ -2,14 +2,28 @@
 import Jed from 'jed';
 import jedGettextParser from 'jed-gettext-parser';
 
+type DomainMap = {
+  [key: string]: ArrayBuffer,
+}
+
 export default class MoEngine {
     jed: Jed;
 
-    constructor(moData: ArrayBuffer, domain: string = 'messages') {
-      const localeData = jedGettextParser.mo.parse(moData);
+    constructor(moData: ArrayBuffer, domain: string = 'messages', additionalDomains: DomainMap = {}) {
+      const domains = {
+        ...additionalDomains,
+        [domain]: moData,
+      };
+
+      const localeData = Object.entries(domains)
+        .reduce((result, [name, data]) => ({
+          ...result,
+          ...jedGettextParser.mo.parse(data, { domain: name }),
+        }), {});
+
       this.jed = new Jed({
         locale_data: localeData,
-        domain,
+        domain: 'messages',
       });
     }
 

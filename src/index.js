@@ -57,29 +57,27 @@ class TranslationProxy {
     this.engine = engine;
   }
 
-  _ = (source: string, context?: string, replacements: Replacements = {}) => replace(
-    this.engine.translate(
-      source,
-      undefined,
-      undefined,
-      context,
-    ),
-    replacements,
-  );
+  _ = (
+    source: string,
+    context?: string,
+    replacements: Replacements = {},
+    domain?: string,
+  ) => this._n(source, undefined, undefined, context, replacements, domain)
 
   _n = (
     singularSource: string,
     pluralSource: string,
     count: number,
     context?: string,
-    replacements:
-      Replacements = {},
+    replacements: Replacements = {},
+    domain?: string,
   ) => replace(
     this.engine.translate(
       singularSource,
       pluralSource,
       count,
       context,
+      domain,
     ),
     replacements,
   );
@@ -103,7 +101,7 @@ function T(props: TranslateProps) {
           {(engine: TranslateEngine) => {
             const { count } = props;
             if (count === undefined || !props.sourcePlural) {
-              return engine._(props.source, props.context, props.replacements);
+              return engine._(props.source, props.context, props.replacements, textDomain);
             }
 
             return engine._n(
@@ -136,14 +134,30 @@ function TranslationProvider({ engine, children }: TranslationProviderProps) {
   );
 }
 
-function _(source: string, context?: string, replacements: Replacements = {}): React.Node {
+function _(
+  source: string,
+  context?: string,
+  replacements: Replacements = {},
+  domain?: string,
+): React.Node {
   return (
     <T
       source={source}
       context={context}
       replacements={replacements}
+      domain={domain}
     />
   );
+}
+
+function withTextDomain(domain: string) {
+  return Component => function withDomain(props) {
+    return (
+      <TextDomainProvider value={domain}>
+        <Component {...props} />
+      </TextDomainProvider>
+    );
+  };
 }
 
 function _n(
@@ -151,8 +165,8 @@ function _n(
   pluralSource: string,
   count: number,
   context?: string,
-  replacements:
-    Replacements = {},
+  replacements: Replacements = {},
+  domain?: string,
 ): React.Node {
   return (
     <T
@@ -161,6 +175,7 @@ function _n(
       count={count}
       context={context}
       replacements={replacements}
+      domain={domain}
     />
   );
 }
@@ -168,6 +183,7 @@ function _n(
 export {
   TranslationContext,
   TranslationProvider,
+  withTextDomain,
   MoEngine,
   T,
   _,

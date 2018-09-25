@@ -25,7 +25,7 @@ export declare const Consumer: React.ComponentType<React.ConsumerProps<Translate
 
 export declare function TranslationProvider(props: TranslationProviderProps): JSX.Element
 export declare class MoEngine {
-    constructor(moData: ArrayBuffer, domain?: string);
+    constructor(moData: ArrayBuffer, domain?: string, domains?: { [domain: string]: ArrayBuffer });
     translate(source: string, sourcePlural?: string, count?: number, context?: string, domain?: string)
 }
 

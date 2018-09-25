@@ -77,4 +77,13 @@ describe('multiple domains', () => {
 
     expect(result).to.equal('Yolo - Hallo');
   });
+
+  it('should find the domain directly in the _ call', () => {
+    const result = render(_('Hello', undefined, undefined, 'greetings'));
+    expect(result).to.equal('Yolo');
+  });
+  it('should find the domain directly in the _n call', () => {
+    const result = render(_n('Hello one', 'Hello %d', 2, undefined, undefined, 'greetings'));
+    expect(result).to.equal('Yolo 2');
+  });
 });

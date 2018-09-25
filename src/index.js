@@ -101,7 +101,12 @@ function T(props: TranslateProps) {
           {(engine: TranslateEngine) => {
             const { count } = props;
             if (count === undefined || !props.sourcePlural) {
-              return engine._(props.source, props.context, props.replacements, textDomain);
+              return engine._(
+                props.source,
+                props.context,
+                props.replacements,
+                props.domain || textDomain,
+              );
             }
 
             return engine._n(

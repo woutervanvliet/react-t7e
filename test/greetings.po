@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-09-25 13:22+0200\n"
-"PO-Revision-Date: 2018-09-25 13:23+0200\n"
+"POT-Creation-Date: 2018-09-25 15:29+0200\n"
+"PO-Revision-Date: 2018-09-25 15:29+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Poedit-KeywordsList: _n:1,2\n"
 "X-Poedit-SearchPath-0: test.js\n"
 
-#: test.js:24 test.js:44
+#: test.js:24 test.js:44 test.js:66 test.js:82
 msgid "Hello"
 msgstr "Yolo"
 
@@ -25,3 +25,10 @@ msgid "Hello one person"
 msgid_plural "Hello %d people"
 msgstr[0] "Yolo een person"
 msgstr[1] "Yolo %d personen"
+
+#: test.js:86
+#, javascript-format
+msgid "Hello one"
+msgid_plural "Hello %d"
+msgstr[0] "Yolo een"
+msgstr[1] "Yolo %d"

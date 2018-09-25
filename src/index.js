@@ -12,6 +12,7 @@ type TranslateProps = {
   count?: number,
   context?: string,
   replacements?: Replacements,
+  domain?: string,
 }
 
 const replace = (input, replacements: Replacements) => {
@@ -21,14 +22,21 @@ const replace = (input, replacements: Replacements) => {
   for (let i = 0; i < replacementKeys.length; i += 1) {
     const from = replacementKeys[i];
     const to = replacements[from];
-    result = result.split(`{${from}`).join(`${to}`);
+    result = result.split(`{${from}`)
+      .join(`${to}`);
   }
 
   return result;
 };
 
 interface TranslateEngine {
-  translate(source: string, sourcePlural?: string, count?: number, context?: string): string;
+  translate(
+    source: string,
+    sourcePlural?: string,
+    count?: number,
+    context?: string,
+    textDomain?: string
+  ): string;
 }
 
 class MockTranslateEngine implements TranslateEngine {
@@ -57,7 +65,7 @@ class TranslationProxy {
       context,
     ),
     replacements,
-  )
+  );
 
   _n = (
     singularSource: string,
@@ -74,34 +82,44 @@ class TranslationProxy {
       context,
     ),
     replacements,
-  )
+  );
 }
 
 const {
-  Provider,
-  Consumer,
+  Provider: TranslationContextProvider,
+  Consumer: TranslationContext,
 } = React.createContext(new TranslationProxy(new MockTranslateEngine()));
+
+const {
+  Provider: TextDomainProvider,
+  Consumer: TextDomainConsumer,
+} = React.createContext('messages');
 
 function T(props: TranslateProps) {
   return (
-    <Consumer>
-      {(engine) => {
-        const { count } = props;
-        if (count === undefined || !props.sourcePlural) {
-          return engine._(props.source, props.context, props.replacements);
-        }
+    <TextDomainConsumer>
+      {(textDomain: string) => (
+        <TranslationContext>
+          {(engine: TranslateEngine) => {
+            const { count } = props;
+            if (count === undefined || !props.sourcePlural) {
+              return engine._(props.source, props.context, props.replacements);
+            }
 
-        return engine._n(
-          props.source,
-          props.sourcePlural,
-          count,
-          props.context,
-          props.replacements,
-        )
-          .replace(/%d/g, count.toFixed(0))
-          .replace(/%f/g, count.toFixed(2));
-      }}
-    </Consumer>
+            return engine._n(
+              props.source,
+              props.sourcePlural,
+              count,
+              props.context,
+              props.replacements,
+              props.domain || textDomain,
+            )
+              .replace(/%d/g, count.toFixed(0))
+              .replace(/%f/g, count.toFixed(2));
+          }}
+        </TranslationContext>
+      )}
+    </TextDomainConsumer>
   );
 }
 
@@ -109,11 +127,12 @@ type TranslationProviderProps = {
   engine: TranslateEngine,
   children: React.Node,
 }
+
 function TranslationProvider({ engine, children }: TranslationProviderProps) {
   return (
-    <Provider value={new TranslationProxy(engine)}>
+    <TranslationContextProvider value={new TranslationProxy(engine)}>
       {children}
-    </Provider>
+    </TranslationContextProvider>
   );
 }
 
@@ -147,7 +166,7 @@ function _n(
 }
 
 export {
-  Consumer as TranslationContext,
+  TranslationContext,
   TranslationProvider,
   MoEngine,
   T,

@@ -18,19 +18,8 @@ export default class MoEngine {
       sourcePlural?: string,
       count?: number,
       context?: string,
+      domain?: string,
     ) {
-      if (count === undefined) {
-        if (context === undefined) {
-          return this.jed.gettext(source);
-        }
-
-        return this.jed.pgettext(context, source);
-      }
-
-      if (context === undefined) {
-        return this.jed.ngettext(source, sourcePlural, count);
-      }
-
-      return this.jed.npgettext(context, source, sourcePlural, count);
+      return this.jed.dcnpgettext(domain, context, source, sourcePlural, count);
     }
 }

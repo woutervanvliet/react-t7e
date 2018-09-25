@@ -1,0 +1,2 @@
+-r @babel/register
+./test.js

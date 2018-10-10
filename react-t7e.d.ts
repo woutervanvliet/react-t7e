@@ -21,8 +21,6 @@ declare type TranslateProps = {
     domain?: string,
 }
 
-export declare const Consumer: React.ComponentType<React.ConsumerProps<TranslateEngine>>;
-
 export declare function TranslationProvider(props: TranslationProviderProps): JSX.Element
 export declare class MoEngine {
     constructor(moData: ArrayBuffer, domain?: string, domains?: { [domain: string]: ArrayBuffer });
@@ -35,6 +33,25 @@ export declare class T extends React.PureComponent<TranslateProps> {
 
 export declare function withTextDomain(domain: string): <P>(Component: React.ComponentType<P>)
     => React.ComponentType<P>
+
+
+declare type ContextProps = {
+    children: (engine: {
+        _: ( source: string, context?: string, replacements?: Replacements, domain?: string, ) => string
+        _n: (
+            singularSource: string,
+            pluralSource: string,
+            count: number,
+            context?: string,
+            replacements?: Replacements,
+            domain?: string,
+        ) => string,
+    }) => JSX.Element
+}
+
+export declare class TranslationContext extends React.PureComponent<ContextProps> {
+    render(): JSX.Element
+}
 
 export declare function _(
     source: string,

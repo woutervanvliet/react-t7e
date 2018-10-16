@@ -6,7 +6,12 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { expect } from 'chai';
 import * as fs from 'fs';
 import {
-  _, _n, MoEngine, TranslationProvider, withTextDomain,
+  _,
+  _n,
+  MoEngine,
+  TranslationProvider,
+  withTextDomain,
+  TranslationContext,
 } from './src/index';
 
 function bufferToArrayBuffer(buffer) {
@@ -55,6 +60,18 @@ describe('with context', () => {
   it('should detect plural', () => {
     const result = render(<p>{_n('Hello one person', 'Hello %d people', 2)}</p>);
     expect(result).to.equal('<p>Hallo 2 personen</p>');
+  });
+  it('should replace numbers also when using TranslationContext - singular', () => {
+    const renderSpan = e => <span title={e._n('%d person', '%d people', 1)} />;
+    const result = render(<TranslationContext>{renderSpan}</TranslationContext>);
+    // noinspection CheckTagEmptyBody
+    expect(result).to.equal('<span title="1 person"></span>');
+  });
+  it('should replace numbers also when using TranslationContext - plural', () => {
+    const renderSpan = e => <span title={e._n('%d person', '%d people', 2)} />;
+    const result = render(<TranslationContext>{renderSpan}</TranslationContext>);
+    // noinspection CheckTagEmptyBody
+    expect(result).to.equal('<span title="2 people"></span>');
   });
 });
 

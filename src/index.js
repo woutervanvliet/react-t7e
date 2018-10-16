@@ -80,7 +80,9 @@ class TranslationProxy {
       domain,
     ),
     replacements,
-  );
+  )
+    .replace(/%d/g, count && count.toFixed(0))
+    .replace(/%f/g, count && count.toFixed(2));
 }
 
 const {
@@ -116,9 +118,7 @@ function T(props: TranslateProps) {
               props.context,
               props.replacements,
               props.domain || textDomain,
-            )
-              .replace(/%d/g, count.toFixed(0))
-              .replace(/%f/g, count.toFixed(2));
+            );
           }}
         </TranslationContext>
       )}

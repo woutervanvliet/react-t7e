@@ -22,7 +22,7 @@ const replace = (input, replacements: Replacements) => {
   for (let i = 0; i < replacementKeys.length; i += 1) {
     const from = replacementKeys[i];
     const to = replacements[from];
-    result = result.split(`{${from}`)
+    result = result.split(`{${from}}`)
       .join(`${to}`);
   }
 

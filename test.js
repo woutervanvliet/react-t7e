@@ -32,6 +32,10 @@ describe('without context', () => {
     const result = renderToStaticMarkup(<p>{_n('Hello one person', 'Hello %d people', 2)}</p>);
     expect(result).to.equal('<p>Hello 2 people</p>');
   });
+  it('should replace a replacement', () => {
+    const result = renderToStaticMarkup(<p>{_('Hello {user}', undefined, { user: 'TheUser' })}</p>);
+    expect(result).to.equal('<p>Hello TheUser</p>');
+  });
 });
 
 describe('with context', () => {

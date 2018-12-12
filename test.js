@@ -99,6 +99,34 @@ describe('multiple domains', () => {
     expect(result).to.equal('Yolo - Hallo');
   });
 
+  it('should translate from the correct domain when used through context', () => {
+    const HelloComponent = () => (
+      <TranslationContext>
+        {
+          contextEngine => <span title={contextEngine._('Hello')} />
+        }
+      </TranslationContext>
+    );
+
+    const DomainBoundHello = withTextDomain('greetings')(HelloComponent);
+    const result = render(<DomainBoundHello />);
+    expect(result).to.equal('<span title="Yolo"></span>');
+  });
+
+  it('should still be able to override text domain when being bound', () => {
+    const HelloComponent = () => (
+      <TranslationContext>
+        {
+          contextEngine => <span title={contextEngine._('Hello', undefined, undefined, 'messages')} />
+        }
+      </TranslationContext>
+    );
+
+    const DomainBoundHello = withTextDomain('greetings')(HelloComponent);
+    const result = render(<DomainBoundHello />);
+    expect(result).to.equal('<span title="Hallo"></span>');
+  });
+
   it('should find the domain directly in the _ call', () => {
     const result = render(_('Hello', undefined, undefined, 'greetings'));
     expect(result).to.equal('Yolo');

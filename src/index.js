@@ -53,8 +53,26 @@ class MockTranslateEngine implements TranslateEngine {
 class TranslationProxy {
   engine: *;
 
+  _perDomainCache = {
+
+  }
+
   constructor(engine: TranslateEngine) {
     this.engine = engine;
+  }
+
+  forDomain(domain: string) {
+    if (this._perDomainCache[domain] === undefined) {
+      const engine = {
+        translate: (source, sourcePlural, count, context, textDomain = domain) => (
+          this.engine.translate(source, sourcePlural, count, context, textDomain)
+        ),
+      };
+
+      this._perDomainCache[domain] = new TranslationProxy(engine);
+    }
+
+    return this._perDomainCache[domain];
   }
 
   _ = (
@@ -90,39 +108,30 @@ const {
   Consumer: TranslationContext,
 } = React.createContext(new TranslationProxy(new MockTranslateEngine()));
 
-const {
-  Provider: TextDomainProvider,
-  Consumer: TextDomainConsumer,
-} = React.createContext('messages');
-
 function T(props: TranslateProps) {
   return (
-    <TextDomainConsumer>
-      {(textDomain: string) => (
-        <TranslationContext>
-          {(engine: TranslateEngine) => {
-            const { count } = props;
-            if (count === undefined || !props.sourcePlural) {
-              return engine._(
-                props.source,
-                props.context,
-                props.replacements,
-                props.domain || textDomain,
-              );
-            }
+    <TranslationContext>
+      {(engine: TranslateEngine) => {
+        const { count } = props;
+        if (count === undefined || !props.sourcePlural) {
+          return engine._(
+            props.source,
+            props.context,
+            props.replacements,
+            props.domain,
+          );
+        }
 
-            return engine._n(
-              props.source,
-              props.sourcePlural,
-              count,
-              props.context,
-              props.replacements,
-              props.domain || textDomain,
-            );
-          }}
-        </TranslationContext>
-      )}
-    </TextDomainConsumer>
+        return engine._n(
+          props.source,
+          props.sourcePlural,
+          count,
+          props.context,
+          props.replacements,
+          props.domain,
+        );
+      }}
+    </TranslationContext>
   );
 }
 
@@ -158,9 +167,15 @@ function _(
 function withTextDomain(domain: string) {
   return Component => function withDomain(props) {
     return (
-      <TextDomainProvider value={domain}>
-        <Component {...props} />
-      </TextDomainProvider>
+      <TranslationContext>
+        {
+          engine => (
+            <TranslationContextProvider value={engine.forDomain(domain)}>
+              <Component {...props} />
+            </TranslationContextProvider>
+          )
+        }
+      </TranslationContext>
     );
   };
 }

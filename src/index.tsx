@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import MoEngine from './mo-engine';
 
@@ -15,7 +14,7 @@ type TranslateProps = {
   domain?: string,
 }
 
-const replace = (input, replacements: Replacements) => {
+const replace = (input: string, replacements: Replacements) => {
   let result = input;
 
   const replacementKeys = Object.keys(replacements);
@@ -29,7 +28,7 @@ const replace = (input, replacements: Replacements) => {
   return result;
 };
 
-interface TranslateEngine {
+export interface TranslateEngine {
   translate(
     source: string,
     sourcePlural?: string,
@@ -51,9 +50,9 @@ class MockTranslateEngine implements TranslateEngine {
 }
 
 class TranslationProxy {
-  engine: *;
+  engine: any;
 
-  _perDomainCache = {
+  _perDomainCache: { [key: string]: TranslationProxy } = {
 
   }
 
@@ -64,7 +63,13 @@ class TranslationProxy {
   forDomain(domain: string) {
     if (this._perDomainCache[domain] === undefined) {
       const engine = {
-        translate: (source, sourcePlural, count, context, textDomain = domain) => (
+        translate: (
+          source: string,
+          sourcePlural?: string,
+          count?: number,
+          context?: string,
+          textDomain = domain,
+        ) => (
           this.engine.translate(source, sourcePlural, count, context, textDomain)
         ),
       };
@@ -84,8 +89,8 @@ class TranslationProxy {
 
   _n = (
     singularSource: string,
-    pluralSource: string,
-    count: number,
+    pluralSource?: string,
+    count?: number,
     context?: string,
     replacements: Replacements = {},
     domain?: string,
@@ -99,19 +104,18 @@ class TranslationProxy {
     ),
     replacements,
   )
-    .replace(/%d/g, count && count.toFixed(0))
-    .replace(/%f/g, count && count.toFixed(2));
+    .replace(/%d/g, count ? count.toFixed(0) : '')
+    .replace(/%f/g, count ? count.toFixed(2) : '');
 }
 
-const {
-  Provider: TranslationContextProvider,
-  Consumer: TranslationContext,
-} = React.createContext(new TranslationProxy(new MockTranslateEngine()));
+const defaultValue = new TranslationProxy(new MockTranslateEngine());
+const Context: React.Context<TranslationProxy> = React.createContext(defaultValue);
+export const TranslationContext: React.Consumer<TranslationProxy> = Context.Consumer;
 
-function T(props: TranslateProps) {
+export function T(props: TranslateProps) {
   return (
-    <TranslationContext>
-      {(engine: TranslateEngine) => {
+    <Context.Consumer>
+      {(engine: TranslationProxy) => {
         const { count } = props;
         if (count === undefined || !props.sourcePlural) {
           return engine._(
@@ -131,29 +135,45 @@ function T(props: TranslateProps) {
           props.domain,
         );
       }}
-    </TranslationContext>
+    </Context.Consumer>
   );
 }
 
 type TranslationProviderProps = {
   engine: TranslateEngine,
-  children: React.Node,
+  children: React.ReactNode,
 }
 
-function TranslationProvider({ engine, children }: TranslationProviderProps) {
+export function TranslationProvider({ engine, children }: TranslationProviderProps) {
   return (
-    <TranslationContextProvider value={new TranslationProxy(engine)}>
+    <Context.Provider value={new TranslationProxy(engine)}>
       {children}
-    </TranslationContextProvider>
+    </Context.Provider>
   );
 }
 
-function _(
+export function withTextDomain<C>(domain: string) {
+  return (Component: React.ComponentType<C>) => function withDomain(props: C) {
+    return (
+      <Context.Consumer>
+        {
+          engine => (
+            <Context.Provider value={engine.forDomain(domain)}>
+              <Component {...props} />
+            </Context.Provider>
+          )
+        }
+      </Context.Consumer>
+    );
+  };
+}
+
+export function _(
   source: string,
   context?: string,
   replacements: Replacements = {},
   domain?: string,
-): React.Node {
+): React.ReactElement<any> {
   return (
     <T
       source={source}
@@ -164,30 +184,14 @@ function _(
   );
 }
 
-function withTextDomain(domain: string) {
-  return Component => function withDomain(props) {
-    return (
-      <TranslationContext>
-        {
-          engine => (
-            <TranslationContextProvider value={engine.forDomain(domain)}>
-              <Component {...props} />
-            </TranslationContextProvider>
-          )
-        }
-      </TranslationContext>
-    );
-  };
-}
-
-function _n(
+export function _n(
   singularSource: string,
   pluralSource: string,
   count: number,
   context?: string,
   replacements: Replacements = {},
   domain?: string,
-): React.Node {
+): React.ReactElement<any> {
   return (
     <T
       source={singularSource}
@@ -201,11 +205,5 @@ function _n(
 }
 
 export {
-  TranslationContext,
-  TranslationProvider,
-  withTextDomain,
   MoEngine,
-  T,
-  _,
-  _n,
 };

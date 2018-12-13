@@ -1,4 +1,4 @@
-// @flow
+// check-js
 import { describe, it, afterEach } from 'mocha';
 import React from 'react';
 import setupJsdom from 'jsdom-global';
@@ -12,7 +12,7 @@ import {
   TranslationProvider,
   withTextDomain,
   TranslationContext,
-} from './src/index';
+} from './es/index';
 
 function bufferToArrayBuffer(buffer) {
   return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);

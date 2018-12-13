@@ -1,4 +1,3 @@
-// @flow
 import Jed from 'jed';
 import jedGettextParser from 'jed-gettext-parser';
 
@@ -7,7 +6,7 @@ type DomainMap = {
 }
 
 export default class MoEngine {
-    jed: Jed;
+    jed: any;
 
     constructor(moData: ArrayBuffer, domain: string = 'messages', additionalDomains: DomainMap = {}) {
       const domains = {

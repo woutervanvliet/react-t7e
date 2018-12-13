@@ -2,7 +2,6 @@ module.exports = {
   parser: 'babel-eslint',
   extends: 'airbnb',
   plugins: [
-    'flowtype',
   ],
   rules: {
     'react/require-default-props': 'off',

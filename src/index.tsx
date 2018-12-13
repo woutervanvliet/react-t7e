@@ -49,7 +49,25 @@ class MockTranslateEngine implements TranslateEngine {
   }
 }
 
-class TranslationProxy {
+export interface Translator {
+    _(
+        source: string,
+        context?: string,
+        replacements?: Replacements,
+        domain?: string,
+    ): string
+    _n(
+        singularSource: string,
+        pluralSource?: string,
+        count?: number,
+        context?: string,
+        replacements?: Replacements,
+        domain?: string,
+    ): string,
+    forDomain(domain: string): Translator
+}
+
+class TranslationProxy implements Translator {
   engine: any;
 
   _perDomainCache: { [key: string]: TranslationProxy } = {
@@ -108,14 +126,14 @@ class TranslationProxy {
     .replace(/%f/g, count ? count.toFixed(2) : '');
 }
 
-const defaultValue = new TranslationProxy(new MockTranslateEngine());
-const Context: React.Context<TranslationProxy> = React.createContext(defaultValue);
-export const TranslationContext: React.Consumer<TranslationProxy> = Context.Consumer;
+const defaultValue: Translator = new TranslationProxy(new MockTranslateEngine());
+const Context: React.Context<Translator> = React.createContext(defaultValue);
+export const TranslationContext: React.Consumer<Translator> = Context.Consumer;
 
 export function T(props: TranslateProps) {
   return (
     <Context.Consumer>
-      {(engine: TranslationProxy) => {
+      {(engine: Translator) => {
         const { count } = props;
         if (count === undefined || !props.sourcePlural) {
           return engine._(

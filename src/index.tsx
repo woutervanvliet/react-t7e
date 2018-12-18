@@ -127,12 +127,12 @@ class TranslationProxy implements Translator {
 }
 
 const defaultValue: Translator = new TranslationProxy(new MockTranslateEngine());
-const Context: React.Context<Translator> = React.createContext(defaultValue);
-export const TranslationContext: React.Consumer<Translator> = Context.Consumer;
+export const TranslatorContext: React.Context<Translator> = React.createContext(defaultValue);
+export const TranslationContext: React.Consumer<Translator> = TranslatorContext.Consumer;
 
 export function T(props: TranslateProps) {
   return (
-    <Context.Consumer>
+    <TranslatorContext.Consumer>
       {(engine: Translator) => {
         const { count } = props;
         if (count === undefined || !props.sourcePlural) {
@@ -153,7 +153,7 @@ export function T(props: TranslateProps) {
           props.domain,
         );
       }}
-    </Context.Consumer>
+    </TranslatorContext.Consumer>
   );
 }
 
@@ -164,24 +164,24 @@ type TranslationProviderProps = {
 
 export function TranslationProvider({ engine, children }: TranslationProviderProps) {
   return (
-    <Context.Provider value={new TranslationProxy(engine)}>
+    <TranslatorContext.Provider value={new TranslationProxy(engine)}>
       {children}
-    </Context.Provider>
+    </TranslatorContext.Provider>
   );
 }
 
 export function withTextDomain<C>(domain: string) {
   return (Component: React.ComponentType<C>) => function withDomain(props: C) {
     return (
-      <Context.Consumer>
+      <TranslatorContext.Consumer>
         {
           engine => (
-            <Context.Provider value={engine.forDomain(domain)}>
+            <TranslatorContext.Provider value={engine.forDomain(domain)}>
               <Component {...props} />
-            </Context.Provider>
+            </TranslatorContext.Provider>
           )
         }
-      </Context.Consumer>
+      </TranslatorContext.Consumer>
     );
   };
 }

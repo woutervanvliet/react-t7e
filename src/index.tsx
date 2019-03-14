@@ -1,5 +1,6 @@
 import * as React from 'react';
 import MoEngine from './mo-engine';
+import {useCallback, useContext} from "react";
 
 type Replacements = {
   [key: string]: string | number,
@@ -220,6 +221,29 @@ export function _n(
       domain={domain}
     />
   );
+}
+
+export function useTranslate(domain?: string) {
+  const contextValue = useContext(TranslatorContext)
+
+  const singular = useCallback((source: string, context?: string, replacements?: Replacements) => {
+    return contextValue._(source, context, replacements, domain)
+  }, [contextValue, domain])
+
+  const plural = useCallback((
+      singularSource: string,
+      pluralSource: string,
+      count: number,
+      context?: string,
+      replacements: Replacements = {},
+  ) => {
+      return contextValue._n(singularSource, pluralSource, count, context, replacements, domain)
+  }, [contextValue, domain])
+
+  return {
+    _: singular,
+    _n: plural,
+  }
 }
 
 export {

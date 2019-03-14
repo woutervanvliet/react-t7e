@@ -3,6 +3,7 @@ import { describe, it, afterEach } from 'mocha';
 import React from 'react';
 import setupJsdom from 'jsdom-global';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { renderHook, cleanup } from 'react-hooks-testing-library';
 import { expect } from 'chai';
 import * as fs from 'fs';
 import {
@@ -12,6 +13,7 @@ import {
   TranslationProvider,
   withTextDomain,
   TranslationContext,
+  useTranslate,
 } from './es/index';
 
 function bufferToArrayBuffer(buffer) {
@@ -21,8 +23,7 @@ function bufferToArrayBuffer(buffer) {
 const messages = bufferToArrayBuffer(fs.readFileSync('./test/messages.mo'));
 const greetings = bufferToArrayBuffer(fs.readFileSync('./test/greetings.mo'));
 
-const cleanupJsdom = setupJsdom();
-afterEach(cleanupJsdom);
+setupJsdom();
 
 describe('without context', () => {
   it('should render out the input value', () => {
@@ -72,6 +73,55 @@ describe('with context', () => {
     const result = render(<TranslationContext>{renderSpan}</TranslationContext>);
     // noinspection CheckTagEmptyBody
     expect(result).to.equal('<span title="2 people"></span>');
+  });
+});
+
+describe('hooks', () => {
+  afterEach(cleanup);
+
+  const engine = new MoEngine(messages, 'messages', {
+    greetings,
+  });
+
+  // eslint-disable-next-line react/prop-types
+  const wrapper = ({ children }) => (
+    <TranslationProvider engine={engine}>{children}</TranslationProvider>
+  );
+
+  it('should translate singular with explicit text domain', () => {
+    const { result } = renderHook(
+      () => useTranslate('greetings')._('Hello'),
+      { wrapper },
+    );
+
+    expect(result).to.have.property('current', 'Yolo');
+  });
+
+  it('should translate singular with default text domain', () => {
+    const { result } = renderHook(
+      () => useTranslate('messages')._('Hello'),
+      { wrapper },
+    );
+
+    expect(result).to.have.property('current', 'Hallo');
+  });
+
+  it('should translate plural with explicit text domain', () => {
+    const { result } = renderHook(
+      () => useTranslate('greetings')._n('Hello one person', 'Hello %d people', 2),
+      { wrapper },
+    );
+
+    expect(result).to.have.property('current', 'Yolo 2 personen');
+  });
+
+  it('should translate singular with default text domain', () => {
+    const { result } = renderHook(
+      () => useTranslate()._n('Hello one person', 'Hello %d people', 2),
+      { wrapper },
+    );
+
+    expect(result).to.have.property('current', 'Hallo 2 personen');
   });
 });
 

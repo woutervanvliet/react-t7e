@@ -123,8 +123,8 @@ class TranslationProxy implements Translator {
     ),
     replacements,
   )
-    .replace(/%d/g, count ? count.toFixed(0) : '')
-    .replace(/%f/g, count ? count.toFixed(2) : '');
+    .replace(/%d/g, count !== undefined ? count.toFixed(0) : '')
+    .replace(/%f/g, count !== undefined ? count.toFixed(2) : '');
 }
 
 const defaultValue: Translator = new TranslationProxy(new MockTranslateEngine());

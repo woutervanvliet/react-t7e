@@ -34,6 +34,10 @@ describe('without context', () => {
     const result = renderToStaticMarkup(<p>{_n('Hello one person', 'Hello %d people', 1)}</p>);
     expect(result).to.equal('<p>Hello one person</p>');
   });
+  it('should detect plural when value is zero', () => {
+    const result = renderToStaticMarkup(<p>{_n('Hello one person', 'Hello %d people', 0)}</p>);
+    expect(result).to.equal('<p>Hello 0 people</p>');
+  });
   it('should detect plural', () => {
     const result = renderToStaticMarkup(<p>{_n('Hello one person', 'Hello %d people', 2)}</p>);
     expect(result).to.equal('<p>Hello 2 people</p>');

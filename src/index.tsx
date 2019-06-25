@@ -49,7 +49,7 @@ class MockTranslateEngine implements TranslateEngine {
 	}
 }
 
-export interface Translator {
+export interface Translate {
 	_(
 		source: string,
 		context?: string,
@@ -64,6 +64,9 @@ export interface Translator {
 		replacements?: Replacements,
 		domain?: string,
 	): string,
+}
+
+export interface Translator extends Translate {
 	forDomain(domain: string): Translator
 }
 
@@ -222,7 +225,7 @@ export function _n(
 	)
 }
 
-export function useTranslate(domain?: string) {
+export function useTranslate(domain?: string): Translate {
 	const contextValue = React.useContext(TranslatorContext)
 
 	const singular = React.useCallback((

@@ -11,16 +11,16 @@ strings. Inspiration for the API comes from the WordPress/PHP implementation of 
 Let's start with a fully functional example. Different ways to use it, including tips on how to create your own translation
 engine, or .po/.mo files will follow afterwards.
 
-````javascript
+```javascript
 import { 
-  _, 
-  _n,
+  useTranslate,
   TranslationProvider,
   MoEngine,
 } from 'react-t7e';
 
 
 function MyComponent(props) {
+    const { _, _n } = useTranslate()
     return (
         <div>
             <h1>{_('Hello World')}</h1>
@@ -45,11 +45,11 @@ fetch('/language/' + language + '.mo')
             document.getElementById('app'),
         )
     })
-````
+```
 
 ## API
 ```javascript
-import { _, _n, TranslationContext, TranslationProvider, MoEngine, T, } from 'react-t7e';
+import { _, _n, TranslationContext, TranslationProvider, MoEngine, T, useTranslate } from 'react-t7e';
 ```
 
 ### Used types

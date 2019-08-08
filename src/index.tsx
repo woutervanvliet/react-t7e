@@ -228,9 +228,15 @@ export function _n(
 export function useTranslate(domain?: string): Translate {
 	const contextValue = React.useContext(TranslatorContext)
 
-	const singular = React.useCallback((
-		source: string, context?: string, replacements?: Replacements,
-	) => contextValue._(source, context, replacements, domain), [contextValue, domain])
+	const singular = React.useCallback(
+		(
+			source: string,
+			context?: string,
+			replacements?: Replacements,
+			overrideDomain?: string,
+		) => contextValue._(source, context, replacements, overrideDomain || domain),
+		[contextValue, domain],
+	)
 
 	const plural = React.useCallback((
 		singularSource: string,
@@ -238,13 +244,14 @@ export function useTranslate(domain?: string): Translate {
 		count: number,
 		context?: string,
 		replacements: Replacements = {},
+		overrideDomain?: string,
 	) => contextValue._n(
 		singularSource,
 		pluralSource,
 		count,
 		context,
 		replacements,
-		domain,
+		overrideDomain || domain,
 	), [contextValue, domain])
 
 	return {

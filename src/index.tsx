@@ -131,6 +131,8 @@ class TranslationProxy implements Translator {
 
 const defaultValue: Translator = new TranslationProxy(new MockTranslateEngine())
 export const TranslatorContext: React.Context<Translator> = React.createContext(defaultValue)
+TranslatorContext.displayName = 'TranslatorContext'
+
 export const TranslationContext: React.Consumer<Translator> = TranslatorContext.Consumer
 
 export function T(props: TranslateProps) {

@@ -230,36 +230,35 @@ export function _n(
 export function useTranslate(domain?: string): Translate {
 	const contextValue = React.useContext(TranslatorContext)
 
-	const singular = React.useCallback(
-		(
+	return React.useMemo(() => {
+		const singular = (
 			source: string,
 			context?: string,
 			replacements?: Replacements,
 			overrideDomain?: string,
-		) => contextValue._(source, context, replacements, overrideDomain || domain),
-		[contextValue, domain],
-	)
+		) => contextValue._(source, context, replacements, overrideDomain || domain)
 
-	const plural = React.useCallback((
-		singularSource: string,
-		pluralSource: string,
-		count: number,
-		context?: string,
-		replacements: Replacements = {},
-		overrideDomain?: string,
-	) => contextValue._n(
-		singularSource,
-		pluralSource,
-		count,
-		context,
-		replacements,
-		overrideDomain || domain,
-	), [contextValue, domain])
+		const plural = (
+			singularSource: string,
+			pluralSource: string,
+			count: number,
+			context?: string,
+			replacements: Replacements = {},
+			overrideDomain?: string,
+		) => contextValue._n(
+			singularSource,
+			pluralSource,
+			count,
+			context,
+			replacements,
+			overrideDomain || domain,
+		)
 
-	return {
-		_: singular,
-		_n: plural,
-	}
+		return {
+			_: singular,
+			_n: plural,
+		}
+	}, [contextValue, domain])
 }
 
 export {

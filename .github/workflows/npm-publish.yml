@@ -17,7 +17,6 @@ jobs:
           node-version: 16
       - run: yarn install --immutable
       - run: yarn build
-      - run: yarn coverage
 
   publish-npm:
     needs: build

@@ -19,14 +19,14 @@
     "po"
   ],
   "scripts": {
-    "test": "mocha src/*.test.ts{,x}",
+    "test": "mocha lib/*.test.js",
     "lint": "tsc && eslint src/**/*.ts{,x}",
     "clean": "rimraf es/ lib/",
     "prepare": "yarn build",
     "prebuild": "yarn run clean",
     "build": "yarn build:es6 && yarn build:es5",
-    "build:es6": "tsc --target es6 --module esnext --outDir ./es",
-    "build:es5": "tsc --target es5 --module commonjs --outDir ./lib"
+    "build:es6": "tsc --project ./tsconfig.es.json --outDir ./es",
+    "build:es5": "tsc --project ./tsconfig.lib.json --outDir ./lib"
   },
   "files": [
     "react-t7e.d.ts",
@@ -35,7 +35,7 @@
     "src/"
   ],
   "devDependencies": {
-    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/react": "^14.0.0",
     "@types/chai": "4.3.5",
     "@types/jsdom-global": "3.0.4",
     "@types/mocha": "10.0.1",

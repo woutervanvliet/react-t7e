@@ -1,10 +1,9 @@
-// check-js
 import * as fs from 'fs'
 import { describe, it, afterEach } from 'mocha'
 import React from 'react'
 import setupJsdom from 'jsdom-global'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { renderHook, cleanup } from '@testing-library/react-hooks'
+import { renderHook, cleanup } from '@testing-library/react'
 import { expect } from 'chai'
 import {
     _,

@@ -4,15 +4,21 @@ module.exports = {
     plugins: [
     ],
     env: {
-        browser: true, // Browser global variables like `window` etc.
-        commonjs: true, // CommonJS global variables and CommonJS scoping.Allows require, exports and module.
-        es6: true, // Enable all ECMAScript 6 features except for modules.
-        node: true, // Defines things like process.env when generating through node
+        // Browser global variables like `window` etc.
+        browser: true,
+        // CommonJS global variables and CommonJS scoping. Allows require, exports and module.
+        commonjs: true,
+        // Enable all ECMAScript 6 features except for modules.
+        es6: true,
+        // Defines things like process.env when generating through node
+        node: true,
     },
     rules: {
         'eol-last': 'error',
         'default-param-last': 'off',
-        'import/no-unresolved': 'error',
+        // Disabling 'import/no-unresolved' since typescript will break first
+        'import/no-unresolved': 'off',
+        'import/extensions': ['error', 'never'],
         indent: ['warn', 4],
         'linebreak-style': ['error', 'unix'],
         'max-classes-per-file': 'off',

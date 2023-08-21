@@ -27,6 +27,7 @@ module.exports = {
         'react/jsx-props-no-spreading': 'off',
         'react/require-default-props': 'off',
         semi: ['warn', 'never'],
+        'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },
     root: true,
 }

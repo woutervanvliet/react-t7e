@@ -19,14 +19,14 @@
     "po"
   ],
   "scripts": {
-    "test": "BABEL_ENV=commonjs mocha",
-    "lint": "eslint --ignore-pattern=!.eslintrc.js .eslintrc.js dist/",
+    "test": "mocha lib/*.test.js",
+    "lint": "tsc && eslint src/**/*.ts{,x}",
     "clean": "rimraf es/ lib/",
     "prepare": "yarn build",
     "prebuild": "yarn run clean",
     "build": "yarn build:es6 && yarn build:es5",
-    "build:es6": "tsc --target es6 --module esnext --outDir ./es",
-    "build:es5": "tsc --target es5 --module commonjs --outDir ./lib"
+    "build:es6": "tsc --project ./tsconfig.es.json --outDir ./es",
+    "build:es5": "tsc --project ./tsconfig.lib.json --outDir ./lib"
   },
   "files": [
     "react-t7e.d.ts",
@@ -35,34 +35,35 @@
     "src/"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.3.4",
-    "@babel/plugin-proposal-class-properties": "^7.3.4",
-    "@babel/preset-env": "^7.3.4",
-    "@babel/preset-react": "^7.0.0",
-    "@babel/register": "^7.0.0",
-    "@types/react": "^16.8.8",
-    "babel-eslint": "^10.0.1",
-    "chai": "^4.1.2",
-    "eslint": "^5.15.1",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-jsx-a11y": "^6.2.1",
-    "eslint-plugin-react": "^7.12.4",
-    "jsdom": "^16.5.0",
+    "@testing-library/react": "^14.0.0",
+    "@types/chai": "4.3.5",
+    "@types/jsdom-global": "3.0.4",
+    "@types/mocha": "10.0.1",
+    "@types/node": "^20.5.1",
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "18.2.7",
+    "@typescript-eslint/parser": "^5.61.0",
+    "chai": "^4.3.7",
+    "eslint": "^8.47.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.28.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jsdom": "^22.1.0",
     "jsdom-global": "^3.0.2",
-    "mocha": "^6.0.2",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
-    "react-hooks-testing-library": "^0.3.7",
-    "rimraf": "^2.6.3",
-    "typescript": "^3.3.3333"
+    "mocha": "^10.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rimraf": "^5.0.1",
+    "ts-node": "10.9.1",
+    "typescript": "^5.1.6"
   },
   "peerDependencies": {
-    "react": "^16.3.0-0"
+    "react": "^16.9.0 | ^17.0.0 | ^18.0.0"
   },
   "dependencies": {
     "jed": "^1.1.1",
-    "jed-gettext-parser": "^1.0.0"
+    "jed-gettext-parser": "^2.0.0"
   }
 }

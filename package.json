@@ -60,7 +60,7 @@
     "typescript": "^5.1.6"
   },
   "peerDependencies": {
-    "react": "^16.9.0 | ^17.0.0 | ^18.0.0"
+    "react": "^16.9.0 || ^17.0.0 || ^18.0.0"
   },
   "dependencies": {
     "jed": "^1.1.1",
